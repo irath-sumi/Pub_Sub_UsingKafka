@@ -6,10 +6,8 @@
 
     class KafkaProducer
     {
-        // public IProducer<string, string> producer;
         private readonly IConfiguration _configuration;
-        private readonly IProducer<string, string> producer;
-        private readonly string topicName;
+        public readonly IProducer<string, string> producer;
 
         public KafkaProducer(IConfiguration configuration)
         {
@@ -23,12 +21,12 @@
             producerConfig.Set("receive.message.max.bytes", _configuration["KafkaProducerConfig:Config:receive.message.max.bytes"]);
 
             producer = new ProducerBuilder<string, string>(producerConfig).Build();
-            topicName = _configuration["KafkaProducerConfig:Topics:Topic1"];
         }
 
         //// Create a producer and send messages every 20ms
-        public async Task ProduceAsync(string message)
+        public async Task<bool> ProduceAsync(string message, string topicName)
         {
+            bool isMessageProduced = false;
             try
             {
                 int count = 0;
@@ -40,11 +38,12 @@
                         Value = message + count.ToString()
                     });
                     if (result.Status == PersistenceStatus.Persisted)
+                    {
                         Console.WriteLine($"Produced message '{result.Value}' to topic {result.Topic}, partition {result.Partition}, offset {result.Offset}");
-                    
-                    else                    
+                        isMessageProduced = true;
+                    }
+                    else
                         Console.WriteLine($"Message delivery failed: {result.Status}");
-                    
 
                     Thread.Sleep(20);
                     count++;
@@ -57,7 +56,9 @@
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
+                isMessageProduced = false;
             }
+            return isMessageProduced;
         }
     }
 

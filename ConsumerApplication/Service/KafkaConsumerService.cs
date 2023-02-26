@@ -44,6 +44,11 @@ namespace ConsumerApplication.Service
             _maxRetryAttempts = int.Parse(_configuration["Kafka:MaxRetryAttempts"]);
             _dlqTopic = _configuration["Kafka:DlqTopic"];
         }
+        /// <summary>
+        /// Starts a consumer that subscribes to a Kafka topic.
+        /// </summary>
+        /// <param name="cancellationToken">this param can be used to cancel the operation if needed.</param>
+        /// <returns></returns>
         public Task StartAsync(CancellationToken cancellationToken)
         {
             _consumer.Subscribe(_configuration["Kafka:Consumer:Topic"]);
@@ -53,6 +58,12 @@ namespace ConsumerApplication.Service
 
             return Task.CompletedTask;
         }
+        /// <summary>
+        /// Asynchronous operation to stop the Kafka consumer service that 
+        /// was started with the StartAsync method.
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
 
         public async Task StopAsync(CancellationToken cancellationToken)
         {
@@ -63,15 +74,20 @@ namespace ConsumerApplication.Service
             try
             {
                 // Signal cancellation to the running task
-                _cts.Cancel();
+                _cts!.Cancel();
             }
             finally
             {
                 // Wait until the running task completes or the timeout expires
-                await Task.WhenAny(_runningTask, Task.Delay(Timeout.Infinite, cancellationToken));
+                await Task.WhenAny(_runningTask!, Task.Delay(Timeout.Infinite, cancellationToken));
             }
 
         }
+        /// <summary>
+        /// consumes messages from a Kafka topic, process them asynchronously.
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         private async Task RunAsync(CancellationToken cancellationToken)
         {
             while (!cancellationToken.IsCancellationRequested)
@@ -97,7 +113,7 @@ namespace ConsumerApplication.Service
 
                             var result = await _producer.ProduceAsync(_dlqTopic, new Message<string, string>
                             {
-                                Key = null,
+                                Key = "my-DLQ-Topic-message",
                                 Value = consumeResult.Message.Value
                             });
                             Console.WriteLine($"Produced message '{result.Value}' to DLQ topic {result.Topic}, partition {result.Partition}, offset {result.Offset}");
@@ -120,6 +136,13 @@ namespace ConsumerApplication.Service
                 }
             }
         }
+        /// <summary>
+        /// Calls external (mock) API. Handles the possibility of errors by retrying the operation.
+        /// Used the Polly library to implement a retry policy
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         private async Task<bool> CallApiAsync(string message, CancellationToken cancellationToken)
         {
             var retryPolicy = Policy
