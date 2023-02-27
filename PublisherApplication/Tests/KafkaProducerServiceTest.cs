@@ -10,14 +10,21 @@ namespace PublisherApplication.Tests
         public async Task ProduceAsyncShouldProduceMessage()
         {
             // Arrange
-            var messageToPublish = "test-message"; var topicName = "test-topic11";
-            var config = new ConfigurationBuilder()
-                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                 .Build();
-            // Act
-            var producer = new KafkaProducer(config);
+            var messageToPublish = "test-message"; 
+            
+            var configuration = new ConfigurationBuilder()
+           .AddInMemoryCollection(new Dictionary<string, string>()
+            {
+                {"KafkaProducerConfig:BootstrapServers", "localhost:9092"},
+                {"KafkaProducerConfig:Config:message.max.bytes", "1000000"},
+                {"KafkaProducerConfig:Config:receive.message.max.bytes","1513486160" }
+               
+           }).Build();
 
-            var isMessagePublished = await producer.ProduceAsync(messageToPublish, topicName);
+            // Act  
+            var producer = new KafkaProducer(configuration);
+
+            var isMessagePublished = await producer.ProduceAsync(messageToPublish, "TEST-topic");
 
             // Assert            
             Assert.IsTrue(isMessagePublished);

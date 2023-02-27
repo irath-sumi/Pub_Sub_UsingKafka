@@ -7,15 +7,15 @@ namespace ConsumerApplication.Service
     public class KafkaConsumerService : IHostedService
     {
         private readonly IConfiguration _configuration;
-        private readonly IConsumer<Ignore, string> _consumer;
+        public readonly IConsumer<Ignore, string> _consumer;
         private readonly IProducer<string, string> _producer;
         private readonly ILogger<KafkaConsumerService> _logger;
 
         private readonly int _maxRetryAttempts;
         private readonly string _dlqTopic;
 
-        private Task? _runningTask;
-        private CancellationTokenSource? _cts;
+        public Task? _runningTask;
+        public CancellationTokenSource? _cts;
 
         public KafkaConsumerService(IConfiguration configuration, ILoggerFactory logger)
         {
@@ -88,7 +88,7 @@ namespace ConsumerApplication.Service
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        private async Task RunAsync(CancellationToken cancellationToken)
+        public async Task RunAsync(CancellationToken cancellationToken)
         {
             while (!cancellationToken.IsCancellationRequested)
             {
@@ -143,7 +143,7 @@ namespace ConsumerApplication.Service
         /// <param name="message"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        private async Task<bool> CallApiAsync(string message, CancellationToken cancellationToken)
+        public async Task<bool> CallApiAsync(string message, CancellationToken cancellationToken)
         {
             var retryPolicy = Policy
                 .Handle<HttpRequestException>()

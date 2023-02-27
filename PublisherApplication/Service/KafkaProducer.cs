@@ -4,11 +4,11 @@
     using System;
     using System.Threading.Tasks;
 
-    class KafkaProducer
+    public class KafkaProducer
     {
         private readonly IConfiguration _configuration;
         public readonly IProducer<string, string> producer;
-
+       
         public KafkaProducer(IConfiguration configuration)
         {
             _configuration = configuration;
