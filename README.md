@@ -13,8 +13,8 @@ How to Run the project?
 5) It will create and start the following containers/images
   - zookeeper
   - kafka
-  -publisher application
-  -consumer application
+  - publisher application
+  - consumer application
 6) Now, go to the Logs(in Docker Desktop) of publisher application to see the messages/data that is produced in topic.
 7) Navigate to logs of consumer application to see the same message.
 
