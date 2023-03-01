@@ -20,9 +20,8 @@ How to Run the project?
 
 Few things done/can be done to prevent memory leakage
 - Use latest version of Confluent kafka library
-- Dispose kafka consumer object when no longer needed. Can be done that ujsing 'using'
+- Dispose kafka consumer object when no longer needed. 
 - Ensure consuming message in timely manner without creating backlog. Too many messages in buffur can cause memory issues.
 - limit the number of messages that are retrieved.
 - set limit on amount of memory.
-- avoid creating new instances of consumer object by using Singleton.
 - while consuming process the messages in batches insted of one by one.
