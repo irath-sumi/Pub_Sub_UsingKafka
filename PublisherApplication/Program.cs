@@ -14,8 +14,6 @@ if (isSuccess)
 else
     Console.WriteLine("Error:Message Not published!");
 
-Console.WriteLine("Message published successfully!");
-
 var app = builder.Build();
 
 app.UseHttpsRedirection();

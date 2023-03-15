@@ -2,10 +2,10 @@ version: '3.9'
 
 services:
   zookeeper:
-    image: zookeeper:latest
-    container_name: zookeeper
-    ports:
-      - "2181:2181"
+     image: zookeeper:latest
+     container_name: zookeeper
+     ports:
+       - "2181:2181"     
     
   kafka:
     image: confluentinc/cp-kafka:latest
@@ -14,11 +14,14 @@ services:
       - zookeeper
     ports:
       - "9092:9092"
+      - "29092:29092"
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_OUTSIDE://0.0.0.0:9092
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT_OUTSIDE://localhost:9092, PLAINTEXT://kafka:29092
+      # KAFKA_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_OUTSIDE://0.0.0.0:9092
+      # KAFKA_ADVERTISED_LISTENERS: PLAINTEXT_OUTSIDE://localhost:9092, PLAINTEXT://kafka:29092
+      KAFKA_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_OUTSIDE://0.0.0.0:29093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_OUTSIDE://localhost:29093
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_OUTSIDE:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       
