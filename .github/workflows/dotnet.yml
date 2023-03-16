@@ -25,4 +25,4 @@ jobs:
     - name: Build
       run: dotnet build PubSubUsingKafka.sln --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test PublisherApplication/Tests --no-build --verbosity normal
