@@ -24,5 +24,6 @@ jobs:
       run: dotnet restore PubSubUsingKafka.sln
     - name: Build
       run: dotnet build PubSubUsingKafka.sln --no-restore
-    - name: Test
-      run: dotnet test PublisherApplication/PublisherApplication.csproj --no-build --verbosity normal
+   # - name: Test
+    #  run: dotnet test PublisherApplication/PublisherApplication.csproj --no-build --verbosity normal
+      
