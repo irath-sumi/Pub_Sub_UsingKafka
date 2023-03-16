@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsumerApplication", "Cons
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{EDF6F757-E01F-4E06-9450-ACA9E8966288}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsumerApplicationTests", "ConsumerApplicationTests\ConsumerApplicationTests.csproj", "{DDDD377E-4188-41EB-BE3E-2EA33FFE4DCF}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
